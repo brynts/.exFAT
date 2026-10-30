@@ -3068,5 +3068,48 @@
 
     <script src=".\Generators\pegasus-dl-converter-kerrdec97.js"></script>
     <script src="script.js"></script>
+    <script>
+window.addEventListener('load', () => {
+    function getScrollableContainer() {
+        let maxScrollWidth = 0;
+        let targetElement = document.documentElement;
+
+        document.querySelectorAll('*').forEach(el => {
+            if (el.scrollWidth > el.clientWidth && el.scrollWidth > maxScrollWidth) {
+                const style = window.getComputedStyle(el);
+                if (style.overflowX !== 'hidden') {
+                    maxScrollWidth = el.scrollWidth;
+                    targetElement = el;
+                }
+            }
+        });
+        return targetElement;
+    }
+
+    const scrollJumps = 400;
+
+    window.addEventListener('keydown', (e) => {
+        const target = getScrollableContainer();
+        
+        if (e.key === 'ArrowRight') {
+            target.scrollBy({ left: scrollJumps, behavior: 'smooth' });
+            e.stopPropagation();
+        } else if (e.key === 'ArrowLeft') {
+            target.scrollBy({ left: -scrollJumps, behavior: 'smooth' });
+            e.stopPropagation();
+        }
+    }, { capture: true });
+
+    window.addEventListener('wheel', (e) => {
+        const target = getScrollableContainer();
+        
+        if (e.deltaY !== 0 || e.deltaX !== 0) {
+            const moveAmount = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY;
+            target.scrollBy({ left: moveAmount, behavior: 'auto' });
+            e.stopPropagation();
+        }
+    }, { passive: true, capture: true });
+});
+</script>
 </body>
 </html>
